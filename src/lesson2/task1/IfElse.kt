@@ -130,15 +130,9 @@ fun whichRookThreatens(
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
 ): Int {
-    var underAtack1 = false
-    var underAtack2 = false
+    val underAtack1 = ((kingX == rookX1) || (kingY == rookY1))
+    val underAtack2 = ((kingX == rookX2) || (kingY == rookY2))
 
-    if ((kingX == rookX1) || (kingY == rookY1)) {
-        underAtack1 = true
-    }
-    if ((kingX == rookX2) || (kingY == rookY2)) {
-        underAtack2 = true
-    }
     if (underAtack1 && underAtack2) {return 3}
     else if (!underAtack1 && !underAtack2) {return 0}
     else if (underAtack1 && !underAtack2) {return 1}
