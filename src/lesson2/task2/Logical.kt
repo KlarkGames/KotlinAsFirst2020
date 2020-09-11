@@ -51,9 +51,8 @@ fun circleInside(
     x1: Double, y1: Double, r1: Double,
     x2: Double, y2: Double, r2: Double
 ): Boolean {
-    val deltaXY = sqrt(((x1 - x2).pow(2) + (y1 - y2).pow(2)))
-    if (deltaXY + r1 <= r2) return true
-    return false
+    val deltaXY = sqrt((x1 - x2).pow(2) + (y1 - y2).pow(2))
+    return (deltaXY + r1 <= r2)
 }
 
 /**
@@ -65,9 +64,8 @@ fun circleInside(
  * кирпич 4 х 4 х 4 пройдёт через отверстие 4 х 4.
  * Вернуть true, если кирпич пройдёт
  */
-fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
-    if ((((a <= r) && (b <= s))) || (((b <= r) && (a <= s))) ||
-        (((b <= r) && (c <= s))) || (((c <= r) && (b <= s))) ||
-        (((c <= r) && (a <= s))) || (((a <= r) && (c <= s)))) return true
-    return false
-}
+fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean =
+           ((((a <= r) && (b <= s))) || (((b <= r) && (a <= s))) ||
+            (((b <= r) && (c <= s))) || (((c <= r) && (b <= s))) ||
+            (((c <= r) && (a <= s))) || (((a <= r) && (c <= s))))
+
