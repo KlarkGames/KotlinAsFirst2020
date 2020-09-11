@@ -69,15 +69,14 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * Мой возраст. Для заданного 0 < n < 200, рассматриваемого как возраст человека,
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
-fun ageDescription(age: Int): String {
-    return when {
-        age % 100 < 20 && age % 100 > 10   -> "$age лет"
-        age % 10 == 1                      -> "$age год"
-        age % 10 in 2..4                   -> "$age года"
-        age % 10 in 5..9 || age % 10 == 0  -> "$age лет"
-        else -> "Несуществует при $age"
-    }
+fun ageDescription(age: Int): String = when {
+    (age % 100 < 20) && (age % 100 > 10) -> "$age лет"
+    age % 10 == 1 -> "$age год"
+    age % 10 in 2..4 -> "$age года"
+    age % 10 in 5..9 || age % 10 == 0 -> "$age лет"
+    else -> "Несуществует при $age"
 }
+
 
 /**
  * Простая (2 балла)
@@ -143,7 +142,7 @@ fun whichRookThreatens(
     if (underAtack1 && underAtack2) {return 3}
     else if (!underAtack1 && !underAtack2) {return 0}
     else if (underAtack1 && !underAtack2) {return 1}
-    else return 2
+    return 2
 }
 
 /**
@@ -174,12 +173,12 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
     if ((a + b) > c && (b + c) > a && (c + a) > b) {
         // По знаку произведения косинусов всех углов мы можем понять, какой треугольник перед нами.
         // Можно пренебречь множителями сторон из теоремы косинусов, так как нам важен только знак
-        var mcos = (a.pow(2) + b.pow(2) - c.pow(2)) * (b.pow(2) + c.pow(2) - a.pow(2)) * (c.pow(2) + a.pow(2) - b.pow(2))
+        val mcos = (a.pow(2) + b.pow(2) - c.pow(2)) * (b.pow(2) + c.pow(2) - a.pow(2)) * (c.pow(2) + a.pow(2) - b.pow(2))
         if (mcos < 0.0) return 2
         else if (mcos == 0.0) return 1
-        else return 0
+        return 0
     }
-    else return -1
+    return -1
 }
 
 /**
@@ -195,5 +194,5 @@ fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
     else if ((c in a..b) && (d in a..b)) return (d - c)
     else if (c in a..b) return (b - c)
     else if (d in a..b) return (d - a)
-    else return -1
+    return -1
 }
