@@ -83,10 +83,9 @@ fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double = (sagenes
  * Вывести значение того же угла в радианах (например, 0.63256).
  */
 fun angleInRadian(deg: Int, min: Int, sec: Int): Double {
-    // Поделив результат из примера на количество общее количество секунд, получаем, что 1 сек = 4.84813e-6
-    val radInSec = 4.84813e-6
-    val radInMin = radInSec * 60
-    val radInDeg = radInMin * 60
+    val radInDeg = PI / 360.0
+    val radInMin = radInDeg / 60.0
+    val radInSec = radInMin / 60.0
 
     return radInDeg * deg + radInMin * min + radInSec * sec
 }
@@ -115,8 +114,8 @@ fun thirdDigit(number: Int): Int = number % 1000 / 100
  * Определите время поезда в пути в минутах (в данном случае 216).
  */
 fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minutesArrive: Int): Int {
-    val timeToStart: Int = hoursDepart * 60 + minutesDepart
-    val timeToEnd: Int = hoursArrive * 60 + minutesArrive
+    val timeToStart = hoursDepart * 60 + minutesDepart
+    val timeToEnd = hoursArrive * 60 + minutesArrive
     return timeToEnd - timeToStart
 }
 
@@ -136,9 +135,9 @@ fun accountInThreeYears(initial: Int, percent: Int): Double = initial * (1 + per
  * Необходимо вывести число, полученное из заданного перестановкой цифр в обратном порядке (например, 874).
  */
 fun numberRevert(number: Int): Int {
-    val first: Int = number / 100
-    val second: Int = number / 10 % 10
-    val third: Int = number % 10
+    val first = number / 100
+    val second = number / 10 % 10
+    val third = number % 10
 
     return third * 100 + second * 10 + first
 }
