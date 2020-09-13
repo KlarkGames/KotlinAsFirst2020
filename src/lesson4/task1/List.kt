@@ -127,7 +127,8 @@ fun abs(v: List<Double>): Double = TODO()
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double = TODO()
+fun mean(list: List<Double>): Double = if (list.isEmpty()) 0.0 else (list.sum() / list.size)
+
 
 /**
  * Средняя (3 балла)
@@ -137,7 +138,11 @@ fun mean(list: List<Double>): Double = TODO()
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun center(list: MutableList<Double>): MutableList<Double> = TODO()
+fun center(list: MutableList<Double>): MutableList<Double> {
+    val center = mean(list)
+    for (i in 0 until list.size) list[i] -= center
+    return list
+}
 
 /**
  * Средняя (3 балла)
@@ -241,7 +246,28 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    var result: String = ""
+    var normalN = n
+    while (normalN != 0) {
+        when {
+            normalN >= 1000 -> {normalN -= 1000; result += "M"}
+            normalN >= 900 -> {normalN -= 900; result += "CM"}
+            normalN >= 500 -> {normalN -= 500; result += "D"}
+            normalN >= 400 -> {normalN -= 400; result += "CD"}
+            normalN >= 100 -> {normalN -= 100; result += "C"}
+            normalN >= 90 -> {normalN -= 90; result += "XC"}
+            normalN >= 50 -> {normalN -= 50; result += "L"}
+            normalN >= 40 -> {normalN -= 40; result += "XL"}
+            normalN >= 10 -> {normalN -= 10; result += "X"}
+            normalN >= 9 -> {normalN -= 9; result += "IX"}
+            normalN >= 5 -> {normalN -= 5; result += "V"}
+            normalN >= 4 -> {normalN -= 4; result += "IV"}
+            normalN >= 1 -> {normalN -= 1; result += "I"}
+        }
+    }
+    return result
+}
 
 /**
  * Очень сложная (7 баллов)
@@ -250,4 +276,120 @@ fun roman(n: Int): String = TODO()
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    val firstThree = n / 1000
+    val secondThree = n % 1000
+    var result = ""
+
+    when {
+        firstThree / 100 == 0 -> result += ""
+        firstThree / 100 == 1 -> result += " сто"
+        firstThree / 100 == 2 -> result += " двести"
+        firstThree / 100 == 3 -> result += " триста"
+        firstThree / 100 == 4 -> result += " четыреста"
+        firstThree / 100 == 5 -> result += " пятьсот"
+        firstThree / 100 == 6 -> result += " шестьсот"
+        firstThree / 100 == 7 -> result += " семьсот"
+        firstThree / 100 == 8 -> result += " восемьсот"
+        firstThree / 100 == 9 -> result += " девятьсот"
+    }
+
+    when {
+        (firstThree % 100 < 20 && firstThree % 100 > 10) -> {
+            when {
+                firstThree % 100 == 11 -> result += " одинадцать тысяч"
+                firstThree % 100 == 12 -> result += " двенадцать тысяч"
+                firstThree % 100 == 13 -> result += " тринадцать тысяч"
+                firstThree % 100 == 14 -> result += " четырнадцать тысяч"
+                firstThree % 100 == 15 -> result += " пятнадцать тысяч"
+                firstThree % 100 == 16 -> result += " шестнадцать тысяч"
+                firstThree % 100 == 17 -> result += " семнадцать тысяч"
+                firstThree % 100 == 18 -> result += " восемьнадцать тысяч"
+                firstThree % 100 == 19 -> result += " девятнадцать тысяч"
+            }
+        }
+        !(firstThree % 100 < 20 && firstThree % 100 > 10) -> {
+            when {
+                firstThree / 10 % 10 == 0 -> result += ""
+                firstThree / 10 % 10 == 1 -> result += " десять"
+                firstThree / 10 % 10 == 2 -> result += " двадцать"
+                firstThree / 10 % 10 == 3 -> result += " тридцать"
+                firstThree / 10 % 10 == 4 -> result += " сорок"
+                firstThree / 10 % 10 == 5 -> result += " пятьдесят"
+                firstThree / 10 % 10 == 6 -> result += " шестьдесят"
+                firstThree / 10 % 10 == 7 -> result += " семьдесят"
+                firstThree / 10 % 10 == 8 -> result += " восемьдесят"
+                firstThree / 10 % 10 == 9 -> result += " "
+            }
+            when {
+                (firstThree % 10 == 0 && firstThree / 10 == 0) -> result += ""
+                (firstThree % 10 == 0 && firstThree / 10 != 0) -> result += " тысяч"
+                firstThree % 10 == 1 -> result += " одна тысяча"
+                firstThree % 10 == 2 -> result += " две тысячи"
+                firstThree % 10 == 3 -> result += " три тысячи"
+                firstThree % 10 == 4 -> result += " четыре тысячи"
+                firstThree % 10 == 5 -> result += " пять тысяч"
+                firstThree % 10 == 6 -> result += " шесть тысяч"
+                firstThree % 10 == 7 -> result += " семь тысяч"
+                firstThree % 10 == 8 -> result += " восемь тысяч"
+                firstThree % 10 == 9 -> result += " девять тысяч"
+            }
+        }
+    }
+    when {
+        secondThree / 100 == 0 -> result += ""
+        secondThree / 100 == 1 -> result += " сто"
+        secondThree / 100 == 2 -> result += " двести"
+        secondThree / 100 == 3 -> result += " триста"
+        secondThree / 100 == 4 -> result += " четыреста"
+        secondThree / 100 == 5 -> result += " пятьсот"
+        secondThree / 100 == 6 -> result += " шестьсот"
+        secondThree / 100 == 7 -> result += " семьсот"
+        secondThree / 100 == 8 -> result += " восемьсот"
+        secondThree / 100 == 9 -> result += " девятьсот"
+    }
+    when {
+        (secondThree % 100 < 20 && secondThree % 100 > 10) -> {
+            when {
+                secondThree % 100 == 11 -> result += " одинадцать"
+                secondThree % 100 == 12 -> result += " двенадцать"
+                secondThree % 100 == 13 -> result += " тринадцать"
+                secondThree % 100 == 14 -> result += " четырнадцать"
+                secondThree % 100 == 15 -> result += " пятнадцать"
+                secondThree % 100 == 16 -> result += " шестнадцать"
+                secondThree % 100 == 17 -> result += " семнадцать"
+                secondThree % 100 == 18 -> result += " восемьнадцать"
+                secondThree % 100 == 19 -> result += " девятнадцать"
+            }
+        }
+        !(secondThree % 100 < 20 && secondThree % 100 > 10) -> {
+            when {
+                secondThree / 10 % 10 == 0 -> result += ""
+                secondThree / 10 % 10 == 1 -> result += " десять"
+                secondThree / 10 % 10 == 2 -> result += " двадцать"
+                secondThree / 10 % 10 == 3 -> result += " тридцать"
+                secondThree / 10 % 10 == 4 -> result += " сорок"
+                secondThree / 10 % 10 == 5 -> result += " пятьдесят"
+                secondThree / 10 % 10 == 6 -> result += " шестьдесят"
+                secondThree / 10 % 10 == 7 -> result += " семьдесят"
+                secondThree / 10 % 10 == 8 -> result += " восемьдесят"
+                secondThree / 10 % 10 == 9 -> result += " девяносто"
+            }
+            when {
+                (secondThree % 10 == 0 && secondThree / 10 == 0) -> result += ""
+                (secondThree % 10 == 0 && secondThree / 10 != 0) -> result += ""
+                secondThree % 10 == 1 -> result += " один"
+                secondThree % 10 == 2 -> result += " два"
+                secondThree % 10 == 3 -> result += " три"
+                secondThree % 10 == 4 -> result += " четыре"
+                secondThree % 10 == 5 -> result += " пять"
+                secondThree % 10 == 6 -> result += " шесть"
+                secondThree % 10 == 7 -> result += " семь"
+                secondThree % 10 == 8 -> result += " восемь"
+                secondThree % 10 == 9 -> result += " девять"
+            }
+        }
+    }
+    result = result.trim()
+    return result
+}
