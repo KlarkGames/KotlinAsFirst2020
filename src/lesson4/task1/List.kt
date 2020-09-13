@@ -304,7 +304,7 @@ fun russian(n: Int): String {
                 firstThree % 100 == 15 -> result += " пятнадцать тысяч"
                 firstThree % 100 == 16 -> result += " шестнадцать тысяч"
                 firstThree % 100 == 17 -> result += " семнадцать тысяч"
-                firstThree % 100 == 18 -> result += " восемьнадцать тысяч"
+                firstThree % 100 == 18 -> result += " восемнадцать тысяч"
                 firstThree % 100 == 19 -> result += " девятнадцать тысяч"
             }
         }
@@ -318,7 +318,7 @@ fun russian(n: Int): String {
                 firstThree / 10 % 10 == 5 -> result += " пятьдесят"
                 firstThree / 10 % 10 == 6 -> result += " шестьдесят"
                 firstThree / 10 % 10 == 7 -> result += " семьдесят"
-                firstThree / 10 % 10 == 8 -> result += " восемьдесят"
+                firstThree / 10 % 10 == 8 -> result += " восемдесят"
                 firstThree / 10 % 10 == 9 -> result += " девяносто"
             }
             when {
@@ -358,7 +358,7 @@ fun russian(n: Int): String {
                 secondThree % 100 == 15 -> result += " пятнадцать"
                 secondThree % 100 == 16 -> result += " шестнадцать"
                 secondThree % 100 == 17 -> result += " семнадцать"
-                secondThree % 100 == 18 -> result += " восемьнадцать"
+                secondThree % 100 == 18 -> result += " восемнадцать"
                 secondThree % 100 == 19 -> result += " девятнадцать"
             }
         }
@@ -372,7 +372,7 @@ fun russian(n: Int): String {
                 secondThree / 10 % 10 == 5 -> result += " пятьдесят"
                 secondThree / 10 % 10 == 6 -> result += " шестьдесят"
                 secondThree / 10 % 10 == 7 -> result += " семьдесят"
-                secondThree / 10 % 10 == 8 -> result += " восемьдесят"
+                secondThree / 10 % 10 == 8 -> result += " восемдесят"
                 secondThree / 10 % 10 == 9 -> result += " девяносто"
             }
             when {
