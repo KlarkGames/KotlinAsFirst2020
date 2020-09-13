@@ -319,7 +319,7 @@ fun russian(n: Int): String {
                 firstThree / 10 % 10 == 6 -> result += " шестьдесят"
                 firstThree / 10 % 10 == 7 -> result += " семьдесят"
                 firstThree / 10 % 10 == 8 -> result += " восемьдесят"
-                firstThree / 10 % 10 == 9 -> result += " девяносо"
+                firstThree / 10 % 10 == 9 -> result += " девяносто"
             }
             when {
                 (firstThree % 10 == 0 && firstThree / 10 == 0) -> result += ""
