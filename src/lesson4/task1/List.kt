@@ -372,7 +372,7 @@ fun russian(n: Int): String {
                 secondThree / 10 % 10 == 5 -> result += " пятьдесят"
                 secondThree / 10 % 10 == 6 -> result += " шестьдесят"
                 secondThree / 10 % 10 == 7 -> result += " семьдесят"
-                secondThree / 10 % 10 == 8 -> result += " восеьмдесят"
+                secondThree / 10 % 10 == 8 -> result += " восемьдесят"
                 secondThree / 10 % 10 == 9 -> result += " девяносто"
             }
             when {
