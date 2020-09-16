@@ -92,7 +92,21 @@ fun digitNumber(n: Int): Int {
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
 
-fun fib(n: Int): Int = if (n <= 2) 1 else (fib(n - 2) + fib(n - 1))
+fun fib(n: Int): Int {
+    if (n < 2) return 1
+    else {
+        var n1 = 0
+        var n2 = 1
+        var result = 1
+
+        for (i in 1..(n - 2)) {
+            n1 = n2
+            n2 = result
+            result = n1 + n2
+        }
+        return result
+    }
+}
 
 /**
  * Простая (2 балла)
@@ -100,12 +114,10 @@ fun fib(n: Int): Int = if (n <= 2) 1 else (fib(n - 2) + fib(n - 1))
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    var result = -1
-
     for (i in 2..n) {
-        if (n % i == 0) {result = i; break}
+        if (n % i == 0) return i
     }
-    return result
+    return 0
 }
 
 /**
@@ -114,12 +126,10 @@ fun minDivisor(n: Int): Int {
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
 fun maxDivisor(n: Int): Int {
-    var result = -1
-
     for (i in n - 1 downTo 1) {
-        if (n % i == 0) {result = i; break}
+        if (n % i == 0) return i
     }
-    return result
+    return 0
 }
 
 /**
@@ -195,7 +205,10 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
     var result = false
 
     while (i * i <= n) {
-        if (i * i >= m) {result = true; break}
+        if (i * i >= m) {
+            result = true
+            break
+        }
         i++
     }
     return result
@@ -229,9 +242,7 @@ fun revert(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean {
-    return (n == revert(n))
-}
+fun isPalindrome(n: Int): Boolean = (n == revert(n))
 
 /**
  * Средняя (3 балла)
@@ -248,8 +259,11 @@ fun hasDifferentDigits(n: Int): Boolean {
     if (n < 10) return false
 
     while (tempN != 0) {
+        if (checker != tempN % 10) {
+            result = true
+            break
+        }
         tempN /= 10
-        if (checker != tempN % 10) {result = true; break}
     }
     return result
 }
@@ -266,7 +280,7 @@ fun hasDifferentDigits(n: Int): Boolean {
 fun sin(x: Double, eps: Double): Double {
     var multiplier = 1
     var result = 0.0
-    var member = 1000000.0
+    var member = eps
     var i = 1
     val normalX = x % (2 * kotlin.math.PI)
 
@@ -292,7 +306,7 @@ fun sin(x: Double, eps: Double): Double {
 fun cos(x: Double, eps: Double): Double {
     var multiplier = 1
     var result = 0.0
-    var member = 1000000.0
+    var member = eps
     var i = 0
     val normalX = x % (2 * kotlin.math.PI)
 
