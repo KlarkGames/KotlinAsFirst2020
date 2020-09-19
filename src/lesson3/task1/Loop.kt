@@ -2,9 +2,7 @@
 
 package lesson3.task1
 
-import kotlin.math.max
-import kotlin.math.pow
-import kotlin.math.sqrt
+import kotlin.math.*
 
 // Урок 3: циклы
 // Максимальное количество баллов = 9
@@ -93,7 +91,7 @@ fun digitNumber(n: Int): Int {
  */
 
 fun fib(n: Int): Int {
-    if (n < 2) return 1
+    return if (n < 2) 1
     else {
         var n1 = 0
         var n2 = 1
@@ -126,10 +124,18 @@ fun minDivisor(n: Int): Int {
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
 fun maxDivisor(n: Int): Int {
-    for (i in n - 1 downTo 1) {
-        if (n % i == 0) return i
+    var divisor = 1
+    var tempN = n
+    var minLastDivisor = Int.MAX_VALUE
+    var tempDivisor = 0
+
+    while (tempN != 1) {
+        tempDivisor = minDivisor(tempN)
+        minLastDivisor = min(minDivisor(tempN), minLastDivisor)
+        divisor *= tempDivisor
+        tempN /= tempDivisor
     }
-    return 0
+    return (divisor / minLastDivisor)
 }
 
 /**
@@ -184,14 +190,7 @@ fun lcm(m: Int, n: Int): Int {
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean {
-    var result = true
-
-    for (i in 2..max(n, m)) {
-        if ((n % i == 0) && (m % i == 0)) result = false
-    }
-    return result
-}
+fun isCoPrime(m: Int, n: Int): Boolean = (lcm(m, n) == m * n)
 
 /**
  * Средняя (3 балла)
@@ -201,7 +200,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
-    var i: Long = 0
+    var i = (sqrt(n.toDouble()) - 1).toLong()
     var result = false
 
     while (i * i <= n) {
@@ -308,9 +307,9 @@ fun cos(x: Double, eps: Double): Double {
     var result = 0.0
     var member = eps
     var i = 0
-    val normalX = x % (2 * kotlin.math.PI)
+    val normalX = x % (2 * PI)
 
-    while (kotlin.math.abs(member) >= eps) {
+    while (abs(member) >= eps) {
         member = normalX.pow(i) / factorial(i) * multiplier
         multiplier *= -1
         result += member

@@ -133,10 +133,10 @@ fun whichRookThreatens(
     val underAtack1 = ((kingX == rookX1) || (kingY == rookY1))
     val underAtack2 = ((kingX == rookX2) || (kingY == rookY2))
 
-    if (underAtack1 && underAtack2) return 3
-    else if (!underAtack1 && !underAtack2) return 0
-    else if (underAtack1 && !underAtack2) return 1
-    return 2
+    return if (underAtack1 && underAtack2) 3
+    else if (!underAtack1 && !underAtack2) 0
+    else if (underAtack1 && !underAtack2) 1
+    else 2
 }
 
 /**
@@ -168,9 +168,9 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
         // По знаку произведения косинусов всех углов мы можем понять, какой треугольник перед нами.
         // Можно пренебречь множителями сторон из теоремы косинусов, так как нам важен только знак
         val mcos = (a.pow(2) + b.pow(2) - c.pow(2)) * (b.pow(2) + c.pow(2) - a.pow(2)) * (c.pow(2) + a.pow(2) - b.pow(2))
-        if (mcos < 0.0) return 2
-        else if (mcos == 0.0) return 1
-        return 0
+        return if (mcos < 0.0) 2
+        else if (mcos == 0.0) 1
+        else 0
     }
     return -1
 }
@@ -184,9 +184,9 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    if ((a in c..d) && (b in c..d)) return (b - a)
-    else if ((c in a..b) && (d in a..b)) return (d - c)
-    else if (c in a..b) return (b - c)
-    else if (d in a..b) return (d - a)
-    return -1
+    return if ((a in c..d) && (b in c..d)) (b - a)
+    else if ((c in a..b) && (d in a..b)) (d - c)
+    else if (c in a..b) (b - c)
+    else if (d in a..b) (d - a)
+    else -1
 }
