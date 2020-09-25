@@ -90,8 +90,8 @@ fun digitNumber(n: Int): Int {
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
 
-fun fib(n: Int): Int {
-    return if (n < 2) 1
+fun fib(n: Int): Int =
+    if (n < 2) 1
     else {
         var n1 = 0
         var n2 = 1
@@ -102,9 +102,8 @@ fun fib(n: Int): Int {
             n2 = result
             result = n1 + n2
         }
-        return result
+        result
     }
-}
 
 /**
  * Простая (2 балла)
@@ -123,20 +122,7 @@ fun minDivisor(n: Int): Int {
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int {
-    var divisor = 1
-    var tempN = n
-    var minLastDivisor = Int.MAX_VALUE
-    var tempDivisor = 0
-
-    while (tempN != 1) {
-        tempDivisor = minDivisor(tempN)
-        minLastDivisor = min(minDivisor(tempN), minLastDivisor)
-        divisor *= tempDivisor
-        tempN /= tempDivisor
-    }
-    return (divisor / minLastDivisor)
-}
+fun maxDivisor(n: Int): Int = n / minDivisor(n)
 
 /**
  * Простая (2 балла)
@@ -281,9 +267,9 @@ fun sin(x: Double, eps: Double): Double {
     var result = 0.0
     var member = eps
     var i = 1
-    val normalX = x % (2 * kotlin.math.PI)
+    val normalX = x % (2 * PI)
 
-    while (kotlin.math.abs(member) >= eps) {
+    while (abs(member) >= eps) {
         member = normalX.pow(i) / factorial(i) * multiplier
         multiplier *= -1
         result += member

@@ -3,7 +3,8 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
-import kotlin.math.sqrt
+import kotlin.math.*
+
 
 // Урок 4: списки
 // Максимальное количество баллов = 12
@@ -151,7 +152,8 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * представленные в виде списков a и b. Скалярное произведение считать по формуле:
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
-fun times(a: List<Int>, b: List<Int>): Int = TODO()
+fun times(a: List<Int>, b: List<Int>): Int = a.zip(b) { a, b -> a * b }.sum()
+
 
 /**
  * Средняя (3 балла)
@@ -161,7 +163,15 @@ fun times(a: List<Int>, b: List<Int>): Int = TODO()
  * Коэффициенты многочлена заданы списком p: (p0, p1, p2, p3, ..., pN).
  * Значение пустого многочлена равно 0 при любом x.
  */
-fun polynom(p: List<Int>, x: Int): Int = TODO()
+fun polynom(p: List<Int>, x: Int): Int {
+    var result = 0
+    var i = 0
+    for (element in p) {
+        result += element * x.toDouble().pow(i).toInt()
+        i++
+    }
+    return result
+}
 
 /**
  * Средняя (3 балла)
@@ -173,7 +183,16 @@ fun polynom(p: List<Int>, x: Int): Int = TODO()
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun accumulate(list: MutableList<Int>): MutableList<Int> = TODO()
+fun accumulate(list: MutableList<Int>): MutableList<Int> = if (list.isEmpty()) list else if (list.size == 1) list else {
+    val tempList = list.toList()
+    println(list)
+    for (i in 1 until list.size) {
+        list[i] = tempList.subList(0, i).sum() + tempList[i]
+    }
+    print(tempList)
+    print(list)
+    list
+}
 
 /**
  * Средняя (3 балла)
@@ -247,23 +266,23 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
-    var result: String = ""
+    var result = ""
     var normalN = n
     while (normalN != 0) {
         when {
-            normalN >= 1000 -> {normalN -= 1000; result += "M"}
-            normalN >= 900 -> {normalN -= 900; result += "CM"}
-            normalN >= 500 -> {normalN -= 500; result += "D"}
-            normalN >= 400 -> {normalN -= 400; result += "CD"}
-            normalN >= 100 -> {normalN -= 100; result += "C"}
-            normalN >= 90 -> {normalN -= 90; result += "XC"}
-            normalN >= 50 -> {normalN -= 50; result += "L"}
-            normalN >= 40 -> {normalN -= 40; result += "XL"}
-            normalN >= 10 -> {normalN -= 10; result += "X"}
-            normalN >= 9 -> {normalN -= 9; result += "IX"}
-            normalN >= 5 -> {normalN -= 5; result += "V"}
-            normalN >= 4 -> {normalN -= 4; result += "IV"}
-            normalN >= 1 -> {normalN -= 1; result += "I"}
+            normalN >= 1000 -> { normalN -= 1000; result += "M" }
+            normalN >= 900 -> { normalN -= 900; result += "CM" }
+            normalN >= 500 -> { normalN -= 500; result += "D" }
+            normalN >= 400 -> { normalN -= 400; result += "CD" }
+            normalN >= 100 -> { normalN -= 100; result += "C" }
+            normalN >= 90 -> { normalN -= 90; result += "XC" }
+            normalN >= 50 -> { normalN -= 50; result += "L" }
+            normalN >= 40 -> { normalN -= 40; result += "XL" }
+            normalN >= 10 -> { normalN -= 10; result += "X" }
+            normalN >= 9 -> { normalN -= 9; result += "IX" }
+            normalN >= 5 -> { normalN -= 5; result += "V" }
+            normalN >= 4 -> { normalN -= 4; result += "IV" }
+            normalN >= 1 -> { normalN -= 1; result += "I" }
         }
     }
     return result
