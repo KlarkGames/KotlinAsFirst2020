@@ -183,14 +183,15 @@ fun polynom(p: List<Int>, x: Int): Int {
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun accumulate(list: MutableList<Int>): MutableList<Int> = if (list.isEmpty()) list else if (list.size == 1) list else {
+fun accumulate(list: MutableList<Int>): MutableList<Int> = if (list.size <= 1) list
+else {
     val tempList = list.toList()
-    println(list)
-    for (i in 1 until list.size) {
-        list[i] = tempList.subList(0, i).sum() + tempList[i]
+    var preventSum = 0
+
+    for (i in 1..list.size) {
+        list[i - 1] += preventSum
+        preventSum += tempList[i - 1]
     }
-    print(tempList)
-    print(list)
     list
 }
 
@@ -201,7 +202,20 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> = if (list.isEmpty()) l
  * Результат разложения вернуть в виде списка множителей, например 75 -> (3, 5, 5).
  * Множители в списке должны располагаться по возрастанию.
  */
-fun factorize(n: Int): List<Int> = TODO()
+fun factorize(n: Int): List<Int> {
+    var tempN = n
+    val result = mutableListOf<Int>()
+    var i = 2
+
+    while (tempN != 1) {
+        if (tempN % i == 0) {
+            tempN /= i
+            result.add(i)
+            i = 2
+        } else i++
+    }
+    return result
+}
 
 /**
  * Сложная (4 балла)
@@ -210,7 +224,22 @@ fun factorize(n: Int): List<Int> = TODO()
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String = TODO()
+fun factorizeToString(n: Int): String {
+    var tempN = n
+    val result = mutableListOf<Int>()
+    var i = 2
+
+    while (tempN != 1) {
+        if (tempN % i == 0) {
+            tempN /= i
+            result.add(i)
+            i = 2
+        } else i++
+    }
+
+    return result.joinToString(separator = "*")
+
+}
 
 /**
  * Средняя (3 балла)
@@ -219,7 +248,16 @@ fun factorizeToString(n: Int): String = TODO()
  * Результат перевода вернуть в виде списка цифр в base-ичной системе от старшей к младшей,
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
-fun convert(n: Int, base: Int): List<Int> = TODO()
+fun convert(n: Int, base: Int): List<Int> {
+    var tempN = n
+    val result = mutableListOf<Int>()
+
+    while (tempN != 0) {
+        result.add(0, tempN % base)
+        tempN /= base
+    }
+    return result
+}
 
 /**
  * Сложная (4 балла)
@@ -232,7 +270,25 @@ fun convert(n: Int, base: Int): List<Int> = TODO()
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, n.toString(base) и подобные), запрещается.
  */
-fun convertToString(n: Int, base: Int): String = TODO()
+fun convertToString(n: Int, base: Int): String { //Я конечно все понимаю, но максимум знаков 33
+    val alphabet = mapOf<Int, String>(10 to "a",
+    11 to "b", 12 to "c", 13 to "d", 14 to "e", 15 to "f", 16 to "g", 17 to "h", 18 to "i", 19 to "j",
+    20 to "k", 21 to "l", 22 to "m", 23 to "n", 24 to "o", 25 to "p", 26 to "q",
+    27 to "r", 28 to "s", 29 to "t", 30 to "u", 31 to "v", 32 to "w", 33 to "x",
+    34 to "y", 35 to "z")
+
+    var tempN = n
+    var result = ""
+    var symbol = 0
+
+    while (tempN != 0) {
+        symbol = tempN % base
+        if (symbol < 10) result += "$symbol"
+        else result += alphabet[symbol]
+        tempN /= base
+    }
+    return result.reversed()
+}
 
 /**
  * Средняя (3 балла)
@@ -255,7 +311,13 @@ fun decimal(digits: List<Int>, base: Int): Int = TODO()
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, str.toInt(base)), запрещается.
  */
-fun decimalFromString(str: String, base: Int): Int = TODO()
+fun decimalFromString(str: String, base: Int): Int {
+    val alphabet = mapOf<String, Int>("a" to 10, "b" to 11, "c" to 12, "d" to 13, "e" to 14, "f" to 15, "g" to 16,
+    "h" to 17, "i" to 18, "j" to 19, "k" to 20, "l" to 21, "m" to 22, "n" to 23, "o" to 24, "p" to 25, "q" to 26,
+    "r" to 27, "s" to 28, "t" to 29, "u" to 30, "v" to 31, "w" to 32, "x" to 33, "y" to 34, "z" to 35)
+
+    return 0
+}
 
 /**
  * Сложная (5 баллов)
