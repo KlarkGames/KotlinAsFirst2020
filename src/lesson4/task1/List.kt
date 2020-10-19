@@ -183,16 +183,11 @@ fun polynom(p: List<Int>, x: Int): Int {
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun accumulate(list: MutableList<Int>): MutableList<Int> = if (list.size <= 1) list
-else {
-    val tempList = list.toList()
-    var preventSum = 0
-
-    for (i in 1..list.size) {
-        list[i - 1] += preventSum
-        preventSum += tempList[i - 1]
+fun accumulate(list: MutableList<Int>): MutableList<Int> {
+    for (i in 1 until list.size) {
+        list[i] += list[i - 1]
     }
-    list
+    return list
 }
 
 /**
@@ -224,22 +219,7 @@ fun factorize(n: Int): List<Int> {
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String {
-    var tempN = n
-    val result = mutableListOf<Int>()
-    var i = 2
-
-    while (tempN != 1) {
-        if (tempN % i == 0) {
-            tempN /= i
-            result.add(i)
-            i = 2
-        } else i++
-    }
-
-    return result.joinToString(separator = "*")
-
-}
+fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*")
 
 /**
  * Средняя (3 балла)
@@ -252,11 +232,13 @@ fun convert(n: Int, base: Int): List<Int> {
     var tempN = n
     val result = mutableListOf<Int>()
 
+    if (n == 0) return listOf(0)
+
     while (tempN != 0) {
-        result.add(0, tempN % base)
+        result.add(tempN % base)
         tempN /= base
     }
-    return result
+    return result.reversed()
 }
 
 /**
@@ -270,7 +252,7 @@ fun convert(n: Int, base: Int): List<Int> {
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, n.toString(base) и подобные), запрещается.
  */
-fun convertToString(n: Int, base: Int): String { //Я конечно все понимаю, но максимум знаков 33
+fun convertToString(n: Int, base: Int): String {
     val alphabet = mapOf<Int, String>(10 to "a",
     11 to "b", 12 to "c", 13 to "d", 14 to "e", 15 to "f", 16 to "g", 17 to "h", 18 to "i", 19 to "j",
     20 to "k", 21 to "l", 22 to "m", 23 to "n", 24 to "o", 25 to "p", 26 to "q",
