@@ -433,5 +433,6 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
         }
     }
 
+    if (matrix[treasures.size - 1][capacity / 50].first == listOf()) return setOf()
     return matrix[treasures.size - 1][capacity / 50].first.toSet()
 }
