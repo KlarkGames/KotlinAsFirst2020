@@ -2,8 +2,6 @@
 
 package lesson5.task1
 
-import kotlin.time.seconds
-
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
 // Рекомендуемое количество баллов = 9
@@ -324,7 +322,39 @@ fun hasAnagrams(words: List<String>): Boolean = TODO()
  *          "GoodGnome" to setOf()
  *        )
  */
-fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> = TODO()
+fun getListOfFriends(friends: Map<String, Set<String>>, name: String, tempResult: Set<String>): Set<String> {
+    val result = tempResult.toMutableSet()
+
+    val listOfFriends = friends[name]
+    if (listOfFriends != null) {
+        for (person in listOfFriends) {
+            if (person !in result) result.addAll(getListOfFriends(friends, person, result))
+        }
+    }
+    return result
+}
+
+
+fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
+    val result = mutableMapOf<String, Set<String>>()
+
+    for ((name, listOfFriends) in friends) result += name to getListOfFriends(friends, name, setOf())
+
+    /**for ((name, friendSet) in friends) {
+    if (result[name] == null) result += name to friendSet
+    for (person in friendSet) {
+    val nextHandList = friends[person]
+
+    if (nextHandList != null) {
+    for (nextHandPerson in nextHandList) {
+    if ((nextHandPerson != name) && !result[name]!!.contains(nextHandPerson)) result[name]!!.plus(nextHandPerson)
+    }
+    } else result += person to mutableSetOf()
+    }
+    }**/
+    return result
+}
+
 
 /**
  * Сложная (6 баллов)
@@ -343,7 +373,14 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+    for (i in list.indices) {
+        for (j in i + 1 until list.size) {
+            if (list[i] + list[j] == number) return i to j
+        }
+    }
+    return -1 to -1
+}
 
 /**
  * Очень сложная (8 баллов)
@@ -366,4 +403,35 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+
+    var names = listOf<String>()
+    var properties = arrayOf<Pair<Int, Int>>()
+    for (treasure in treasures){
+        names += treasure.key
+        properties += treasure.value.first to treasure.value.second
+    }
+
+    var matrix = Array(treasures.size) { Array((capacity / 50 + 1)) { (listOf<String>() to 0) } }
+
+    var lastMax = listOf<String>() to 0
+    var nowValue = listOf<String>() to 0
+
+
+    for (i in 0 until treasures.size) {
+        for (j in 0 until (capacity / 50 + 1)) {
+            val m = properties[i].first / 50
+            if (i == 0){
+                lastMax = listOf<String>() to 0
+                nowValue = if (m > j) listOf<String>() to 0 else listOf(names[i]) to properties[i].second
+            } else {
+                lastMax = matrix[i - 1][j]
+                nowValue = if (m > j) listOf<String>() to 0 else (matrix[i - 1][j - m].first + names[i]) to (matrix[i - 1][j - m].second + properties[i].second)
+            }
+
+            matrix[i][j] = if (lastMax.second > nowValue.second) lastMax else nowValue
+        }
+    }
+
+    return matrix[treasures.size - 1][capacity / 50].first.toSet()
+}
