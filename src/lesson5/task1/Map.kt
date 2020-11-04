@@ -432,7 +432,7 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
             matrix[i][j] = if (lastMax.second > nowValue.second) lastMax else nowValue
         }
     }
-
+    if (matrix.size == 0) return setOf<String>()
     return matrix[treasures.size - 1][capacity].first.toSet()
 
 }
