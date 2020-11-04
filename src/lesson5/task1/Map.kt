@@ -412,15 +412,15 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
         properties += treasure.value.first to treasure.value.second
     }
 
-    var matrix = Array(treasures.size) { Array((capacity / 50 + 1)) { (listOf<String>() to 0) } }
+    var matrix = Array(treasures.size) { Array((capacity + 1)) { (listOf<String>() to 0) } }
 
     var lastMax = listOf<String>() to 0
     var nowValue = listOf<String>() to 0
 
 
     for (i in 0 until treasures.size) {
-        for (j in 0 until (capacity / 50 + 1)) {
-            val m = properties[i].first / 50
+        for (j in 0 until (capacity + 1)) {
+            val m = properties[i].first
             if (i == 0){
                 lastMax = listOf<String>() to 0
                 nowValue = if (m > j) listOf<String>() to 0 else listOf(names[i]) to properties[i].second
@@ -433,5 +433,6 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
         }
     }
 
-    return matrix[treasures.size - 1][capacity / 50].first.toSet()
+    return matrix[treasures.size - 1][capacity].first.toSet()
+
 }
