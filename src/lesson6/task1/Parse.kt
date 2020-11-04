@@ -74,7 +74,28 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun dateStrToDigit(str: String): String {
+    val info = str.split(" ")
+    if (info.size != 3) return ""
+    val month = mapOf<String, Pair<Int, Int>>(
+        "января" to (1 to 31),
+        "февраля" to (2 to if (info[2].toInt() % 4 == 0) 29 else 28),
+        "марта" to (3 to 31),
+        "апреля" to (4 to 30),
+        "мая" to (5 to 31),
+        "июня" to (6 to 30),
+        "июля" to (7 to 31),
+        "августа" to (8 to 31),
+        "сентября" to (9 to 30),
+        "октября" to (10 to 31),
+        "ноября" to (11 to 30),
+        "декабря" to (12 to 31),
+    )
+    if (month[info[1]] == null || info[0].toInt() > month[info[1]]!!.second) return ""
+    else return String.format("%02d" + "." + "%02d" + "." + "%04d", info[0].toInt(), month[info[1]]!!.first, info[2].toInt())
+
+
+}
 
 /**
  * Средняя (4 балла)
@@ -175,7 +196,45 @@ fun mostExpensive(description: String): String = TODO()
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
-fun fromRoman(roman: String): Int = TODO()
+fun fromRoman(roman: String): Int {
+    var string = roman
+    var result = 0
+
+    val thousands = listOf<String>("MMMM", "MMM", "MM", "M", "")
+    val hundreds = listOf<String>("CM", "DCCC", "DCC", "DC", "D", "CD", "CCC", "CC", "C", "")
+    val decades = listOf<String>("XC", "LXXX", "LXX", "LX", "L", "XL", "XXX", "XX", "X", "")
+    val units = listOf<String>("IX", "VIII", "VII", "VI", "V", "IV", "III", "II", "I", "")
+
+    for (i in 0..4) {
+        if (string.startsWith(thousands[i])) {
+            string = string.drop(thousands[i].length)
+            result += (4 - i) * 1000
+            break
+        }
+    }
+    for (i in 0..9) {
+        if (string.startsWith(hundreds[i])) {
+            string = string.drop(hundreds[i].length)
+            result += (9 - i) * 100
+            break
+        }
+    }
+    for (i in 0..9) {
+        if (string.startsWith(decades[i])) {
+            string = string.drop(decades[i].length)
+            result += (9 - i) * 10
+            break
+        }
+    }
+    for (i in 0..9) {
+        if (string.startsWith(units[i])) {
+            string = string.drop(units[i].length)
+            result += (9 - i)
+            break
+        }
+    }
+    return if (string.isNotEmpty()) -1 else result
+}
 
 /**
  * Очень сложная (7 баллов)
