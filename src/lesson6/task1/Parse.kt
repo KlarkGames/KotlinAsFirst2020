@@ -2,6 +2,8 @@
 
 package lesson6.task1
 
+import kotlin.IllegalArgumentException
+
 // Урок 6: разбор строк, исключения
 // Максимальное количество баллов = 13
 // Рекомендуемое количество баллов = 11
@@ -92,7 +94,12 @@ fun dateStrToDigit(str: String): String {
         "декабря" to (12 to 31),
     )
     if (month[info[1]] == null || info[0].toInt() > month[info[1]]!!.second) return ""
-    else return String.format("%02d" + "." + "%02d" + "." + "%04d", info[0].toInt(), month[info[1]]!!.first, info[2].toInt())
+    else return String.format(
+        "%02d" + "." + "%02d" + "." + "%04d",
+        info[0].toInt(),
+        month[info[1]]!!.first,
+        info[2].toInt()
+    )
 
 
 }
@@ -233,6 +240,7 @@ fun fromRoman(roman: String): Int {
             break
         }
     }
+
     return if (string.isNotEmpty()) -1 else result
 }
 
@@ -272,4 +280,61 @@ fun fromRoman(roman: String): Int {
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
+
+    val list = MutableList(cells) { 0 }
+    var x = cells / 2
+    var counter = 0
+    var commandN = 0
+    val cycleMap = mutableMapOf<Int, Int>()
+    val reversedCycleMap = mutableMapOf<Int, Int>()
+    val commandsList = listOf('<', '>', '+', '-', '[', ']', ' ')
+
+    var stackOfCycleStars = listOf<Int>()
+    for (i in commands.indices) {
+        when (commands[i]) {
+            !in commandsList -> throw IllegalArgumentException()
+            '[' -> {
+                cycleMap += i to 0
+                stackOfCycleStars += i
+            }
+            ']' -> {
+                if (stackOfCycleStars.isEmpty()) throw IllegalArgumentException()
+                else {
+                    cycleMap[stackOfCycleStars.last()] = i
+                    stackOfCycleStars = stackOfCycleStars.dropLast(1)
+                }
+            }
+        }
+    }
+    if (stackOfCycleStars.isNotEmpty()) throw IllegalArgumentException()
+
+    for ((key, value) in cycleMap) {
+        reversedCycleMap += value to key
+    }
+
+    while (commandN <= commands.lastIndex) {
+        if (counter == limit) return list
+        when (commands[commandN]) {
+            '+' -> list[x]++
+            '-' -> list[x]--
+            '>' -> {
+                x++
+                if (x >= cells) throw  IllegalStateException()
+            }
+            '<' -> {
+                x--
+                if (x < 0) throw IllegalStateException()
+            }
+            '[' -> if (list[x] == 0) {
+                commandN = cycleMap[commandN]!!
+            }
+            ']' -> if (list[x] != 0) {
+                commandN = reversedCycleMap[commandN]!!
+            }
+        }
+        commandN++
+        counter++
+    }
+    return list
+}

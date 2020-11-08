@@ -293,13 +293,7 @@ fun decimal(digits: List<Int>, base: Int): Int = TODO()
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, str.toInt(base)), запрещается.
  */
-fun decimalFromString(str: String, base: Int): Int {
-    val alphabet = mapOf<String, Int>("a" to 10, "b" to 11, "c" to 12, "d" to 13, "e" to 14, "f" to 15, "g" to 16,
-    "h" to 17, "i" to 18, "j" to 19, "k" to 20, "l" to 21, "m" to 22, "n" to 23, "o" to 24, "p" to 25, "q" to 26,
-    "r" to 27, "s" to 28, "t" to 29, "u" to 30, "v" to 31, "w" to 32, "x" to 33, "y" to 34, "z" to 35)
-
-    return 0
-}
+fun decimalFromString(str: String, base: Int): Int = TODO()
 
 /**
  * Сложная (5 баллов)
