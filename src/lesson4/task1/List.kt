@@ -206,7 +206,6 @@ fun factorize(n: Int): List<Int> {
         if (tempN % i == 0) {
             tempN /= i
             result.add(i)
-            i = 2
         } else i++
     }
     return result
@@ -252,25 +251,7 @@ fun convert(n: Int, base: Int): List<Int> {
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, n.toString(base) и подобные), запрещается.
  */
-fun convertToString(n: Int, base: Int): String {
-    val alphabet = mapOf<Int, String>(10 to "a",
-    11 to "b", 12 to "c", 13 to "d", 14 to "e", 15 to "f", 16 to "g", 17 to "h", 18 to "i", 19 to "j",
-    20 to "k", 21 to "l", 22 to "m", 23 to "n", 24 to "o", 25 to "p", 26 to "q",
-    27 to "r", 28 to "s", 29 to "t", 30 to "u", 31 to "v", 32 to "w", 33 to "x",
-    34 to "y", 35 to "z")
-
-    var tempN = n
-    var result = ""
-    var symbol = 0
-
-    while (tempN != 0) {
-        symbol = tempN % base
-        if (symbol < 10) result += "$symbol"
-        else result += alphabet[symbol]
-        tempN /= base
-    }
-    return result.reversed()
-}
+fun convertToString(n: Int, base: Int): String = TODO()
 
 /**
  * Средняя (3 балла)
@@ -306,21 +287,27 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
 fun roman(n: Int): String {
     var result = ""
     var normalN = n
+    val info = mapOf<Int, String>(
+        1000 to "M",
+        900 to "CM",
+        500 to "D",
+        400 to "CD",
+        100 to "C",
+        90 to "XC",
+        50 to "L",
+        40 to "XL",
+        10 to "X",
+        9 to "IX",
+        5 to "V",
+        4 to "IV",
+        1 to "I"
+    )
     while (normalN != 0) {
-        when {
-            normalN >= 1000 -> { normalN -= 1000; result += "M" }
-            normalN >= 900 -> { normalN -= 900; result += "CM" }
-            normalN >= 500 -> { normalN -= 500; result += "D" }
-            normalN >= 400 -> { normalN -= 400; result += "CD" }
-            normalN >= 100 -> { normalN -= 100; result += "C" }
-            normalN >= 90 -> { normalN -= 90; result += "XC" }
-            normalN >= 50 -> { normalN -= 50; result += "L" }
-            normalN >= 40 -> { normalN -= 40; result += "XL" }
-            normalN >= 10 -> { normalN -= 10; result += "X" }
-            normalN >= 9 -> { normalN -= 9; result += "IX" }
-            normalN >= 5 -> { normalN -= 5; result += "V" }
-            normalN >= 4 -> { normalN -= 4; result += "IV" }
-            normalN >= 1 -> { normalN -= 1; result += "I" }
+        for ((value, symbol) in info) {
+            while (normalN >= value) {
+                normalN -= value
+                result += symbol
+            }
         }
     }
     return result

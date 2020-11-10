@@ -118,12 +118,11 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
-    var result = true
 
     for ((key, value) in a) {
-        if (b[key] != value || b[key] == null) result = false
+        if (b[key] != value) return false
     }
-    return result
+    return true
 }
 
 /**
@@ -153,12 +152,7 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
  * В выходном списке не должно быть повторяюихся элементов,
  * т. е. whoAreInBoth(listOf("Марат", "Семён, "Марат"), listOf("Марат", "Марат")) == listOf("Марат")
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
-    val result = mutableListOf<String>()
-
-    for (name in a) if (name in b) result.add(name)
-    return result
-}
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.intersect(b).toList()
 
 /**
  * Средняя (3 балла)
@@ -207,7 +201,7 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
         if (tempMap[sale] == null) tempMap += sale to mutableListOf(price)
         else tempMap[sale]!!.add(price)
     }
-    for ((sale, listOfPrices) in tempMap) result += sale to (listOfPrices.sum() / listOfPrices.size)
+    for ((sale, listOfPrices) in tempMap) result += sale to listOfPrices.average()
     return result
 }
 
@@ -270,8 +264,8 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
         else allInfo[element] = allInfo[element]!!.plus(1)
     }
 
-    for (element in list) if (allInfo[element] == 1) allInfo.remove(element)
-    return allInfo
+
+    return allInfo.filterValues { it != 1 }
 }
 
 /**
@@ -335,25 +329,7 @@ fun getListOfFriends(friends: Map<String, Set<String>>, name: String, tempResult
 }
 
 
-fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
-    val result = mutableMapOf<String, Set<String>>()
-
-    for ((name, listOfFriends) in friends) result += name to getListOfFriends(friends, name, setOf())
-
-    /**for ((name, friendSet) in friends) {
-    if (result[name] == null) result += name to friendSet
-    for (person in friendSet) {
-    val nextHandList = friends[person]
-
-    if (nextHandList != null) {
-    for (nextHandPerson in nextHandList) {
-    if ((nextHandPerson != name) && !result[name]!!.contains(nextHandPerson)) result[name]!!.plus(nextHandPerson)
-    }
-    } else result += person to mutableSetOf()
-    }
-    }**/
-    return result
-}
+fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> = TODO()
 
 
 /**
@@ -405,14 +381,14 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  */
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
 
-    var names = listOf<String>()
+    val names = mutableListOf<String>()
     var properties = arrayOf<Pair<Int, Int>>()
-    for (treasure in treasures){
+    for (treasure in treasures) {
         names += treasure.key
         properties += treasure.value.first to treasure.value.second
     }
 
-    var matrix = Array(treasures.size) { Array((capacity + 1)) { (listOf<String>() to 0) } }
+    val matrix = Array(treasures.size) { Array((capacity + 1)) { (listOf<String>() to 0) } }
 
     var lastMax = listOf<String>() to 0
     var nowValue = listOf<String>() to 0
@@ -421,18 +397,19 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     for (i in 0 until treasures.size) {
         for (j in 0 until (capacity + 1)) {
             val m = properties[i].first
-            if (i == 0){
+            if (i == 0) {
                 lastMax = listOf<String>() to 0
                 nowValue = if (m > j) listOf<String>() to 0 else listOf(names[i]) to properties[i].second
             } else {
                 lastMax = matrix[i - 1][j]
-                nowValue = if (m > j) listOf<String>() to 0 else (matrix[i - 1][j - m].first + names[i]) to (matrix[i - 1][j - m].second + properties[i].second)
+                nowValue = if (m > j) listOf<String>() to 0
+                else (matrix[i - 1][j - m].first + names[i]) to (matrix[i - 1][j - m].second + properties[i].second)
             }
 
             matrix[i][j] = if (lastMax.second > nowValue.second) lastMax else nowValue
         }
     }
-    if (matrix.size == 0) return setOf<String>()
+    if (matrix.isEmpty()) return setOf<String>()
     return matrix[treasures.size - 1][capacity].first.toSet()
 
 }
