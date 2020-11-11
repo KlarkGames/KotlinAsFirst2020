@@ -212,7 +212,7 @@ fun fromRoman(roman: String): Int {
     val thousands = listOf<String>("MMMM", "MMM", "MM", "M", "")
     val hundreds = listOf<String>("CM", "DCCC", "DCC", "DC", "D", "CD", "CCC", "CC", "C", "")
     val decades = listOf<String>("XC", "LXXX", "LXX", "LX", "L", "XL", "XXX", "XX", "X", "")
-    val units = listOf<String>("IX", "VIII", "VII", "VI", "V", "IV", "III", "II", "I")
+    val units = listOf<String>("IX", "VIII", "VII", "VI", "V", "IV", "III", "II", "I", "")
 
     for (i in 0..4) {
         if (string.startsWith(thousands[i])) {
@@ -235,10 +235,10 @@ fun fromRoman(roman: String): Int {
             break
         }
     }
-    for (i in 0..8) {
+    for (i in 0..9) {
         if (string.startsWith(units[i])) {
             string = string.drop(units[i].length)
-            result += (8 - i)
+            result += (9 - i)
             break
         }
     }
