@@ -341,7 +341,7 @@ fun russian(n: Int): String {
     when {
         (firstThree % 100 < 20 && firstThree % 100 > 10) -> {
             when {
-                firstThree % 100 == 11 -> result += " одинадцать тысяч"
+                firstThree % 100 == 11 -> result += " одиннадцать тысяч"
                 firstThree % 100 == 12 -> result += " двенадцать тысяч"
                 firstThree % 100 == 13 -> result += " тринадцать тысяч"
                 firstThree % 100 == 14 -> result += " четырнадцать тысяч"
@@ -395,7 +395,7 @@ fun russian(n: Int): String {
     when {
         (secondThree % 100 < 20 && secondThree % 100 > 10) -> {
             when {
-                secondThree % 100 == 11 -> result += " одинадцать"
+                secondThree % 100 == 11 -> result += " одиннадцать"
                 secondThree % 100 == 12 -> result += " двенадцать"
                 secondThree % 100 == 13 -> result += " тринадцать"
                 secondThree % 100 == 14 -> result += " четырнадцать"
