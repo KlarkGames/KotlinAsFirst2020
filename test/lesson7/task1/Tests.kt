@@ -60,6 +60,12 @@ Basic, Ruby, Swift.
     @Test
     @Tag("8")
     fun deleteMarked() {
+        deleteMarked("input/test_deleteMarket.txt", "temp.txt")
+        assertFileContent(
+            "temp.txt",
+            """""".trimIndent()
+        )
+        File("temp.txt").delete()
         deleteMarked("input/delete_in1.txt", "temp.txt")
         assertFileContent(
             "temp.txt",
@@ -115,6 +121,12 @@ Basic, Ruby, Swift.
     @Test
     @Tag("15")
     fun centerFile() {
+        centerFile("input/test_center_in1.txt", "temp.txt")
+        assertFileContent(
+            "temp.txt",
+            """ба"""
+        )
+        File("temp.txt").delete()
         centerFile("input/center_in1.txt", "temp.txt")
         assertFileContent(
             "temp.txt",

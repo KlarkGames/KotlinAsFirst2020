@@ -128,11 +128,14 @@ fun sibilants(inputName: String, outputName: String) {
 
     var text = File(inputName).readText()
     writer.write(text[0].toString())
-    for (i in 0 until (text.length - 1)) {
-        if ((text[i].toLowerCase() in consonants) && (text[i + 1] in vowels.keys))
-            writer.write(vowels[text[i + 1]].toString())
-        else writer.write(text[i + 1].toString())
+    if (text.length > 1) {
+        for (i in 0 until (text.length - 1)) {
+            if ((text[i].toLowerCase() in consonants) && (text[i + 1] in vowels.keys))
+                writer.write(vowels[text[i + 1]].toString())
+            else writer.write(text[i + 1].toString())
+        }
     }
+
     writer.close()
 }
 
@@ -157,8 +160,7 @@ fun centerFile(inputName: String, outputName: String) {
     var maxLength = 0
     val writer = File(outputName).bufferedWriter()
     for (line in File(inputName).readLines()) {
-        println("${line.trim()} ${line.trim().length}")
-        maxLength = maxOf(maxLength, line.length)
+        maxLength = maxOf(maxLength, line.trim().length)
     }
     println(maxLength)
     for (line in File(inputName).readLines()) {
