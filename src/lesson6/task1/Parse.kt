@@ -95,7 +95,7 @@ fun dateStrToDigit(str: String): String {
     )
     if (month[info[1]] == null || info[0].toInt() > month[info[1]]!!.second) return ""
     else return String.format(
-        "%02d" + "." + "%02d" + "." + "%04d",
+        "%02d" + "." + "%02d" + "." + "%d",
         info[0].toInt(),
         month[info[1]]!!.first,
         info[2].toInt()
