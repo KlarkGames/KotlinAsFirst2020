@@ -223,7 +223,28 @@ fun alignFileByWidth(inputName: String, outputName: String) {
  * Ключи в ассоциативном массиве должны быть в нижнем регистре.
  *
  */
-fun top20Words(inputName: String): Map<String, Int> = TODO()
+fun top20Words(inputName: String): Map<String, Int> {
+    val text = File(inputName).readText().replace(Regex("[^A-Za-zА-Яа-яЁё ]"), " ").toLowerCase()
+    val result = mutableMapOf<String, Int>()
+    for (word in text.split(' ')) {
+        if (word !in result.keys) result += word to 1
+        else result[word] = result[word]!!.plus(1)
+    }
+
+    result.remove("")
+    var counter = 0
+    var prevValue = -1
+    val lastResult = mutableMapOf<String, Int>()
+    for ((key, value) in result.toList().sortedByDescending { it.second }.toMap()) {
+        if (counter > 20 && value != prevValue) {
+            break
+        }
+        prevValue = value
+        counter++
+        lastResult += key to value
+    }
+    return lastResult
+}
 
 /**
  * Средняя (14 баллов)
@@ -338,7 +359,25 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    TODO()
+    val commands = mapOf(
+        "*" to ("<i>" to "</i>"),
+        "**" to ("<b>" to "</b>"),
+        "~~" to ("<s>" to "</s>"),
+        "" to ("<p>" to "</p>")
+    )
+    val stack = mutableListOf<String>()
+    val writer = File(outputName).bufferedWriter()
+    writer.write("<html>\n")
+    writer.write("<body>\n")
+
+    File(inputName).forEachLine {
+        TODO()
+    }
+
+    writer.write("\n</body>")
+    writer.write("\n</html>")
+    writer.close()
+    print(File(outputName).readText())
 }
 
 /**
