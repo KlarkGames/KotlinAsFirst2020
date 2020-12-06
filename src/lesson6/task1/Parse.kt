@@ -207,48 +207,6 @@ fun mostExpensive(description: String): String = TODO()
  * Вернуть -1, если roman не является корректным римским числом
  */
 fun fromRoman(roman: String): Int {
-    /*
-    var string = roman
-    var result = 0
-
-    if (string.isEmpty()) return -1
-
-    val thousands = listOf<String>("MMMM", "MMM", "MM", "M", "")
-    val hundreds = listOf<String>("CM", "DCCC", "DCC", "DC", "D", "CD", "CCC", "CC", "C", "")
-    val decades = listOf<String>("XC", "LXXX", "LXX", "LX", "L", "XL", "XXX", "XX", "X", "")
-    val units = listOf<String>("IX", "VIII", "VII", "VI", "V", "IV", "III", "II", "I", "")
-
-    for (i in 0..4) {
-        if (string.startsWith(thousands[i])) {
-            string = string.drop(thousands[i].length)
-            result += (4 - i) * 1000
-            break
-        }
-    }
-    for (i in 0..9) {
-        if (string.startsWith(hundreds[i])) {
-            string = string.drop(hundreds[i].length)
-            result += (9 - i) * 100
-            break
-        }
-    }
-    for (i in 0..9) {
-        if (string.startsWith(decades[i])) {
-            string = string.drop(decades[i].length)
-            result += (9 - i) * 10
-            break
-        }
-    }
-    for (i in 0..9) {
-        if (string.startsWith(units[i])) {
-            string = string.drop(units[i].length)
-            result += (9 - i)
-            break
-        }
-    }
-
-    return if (string.isNotEmpty()) -1 else result
-    */
     val romanSymbolsToInt = mapOf<Char, Int>(
         'I' to 1,
         'V' to 5,
@@ -267,19 +225,24 @@ fun fromRoman(roman: String): Int {
         500 to listOf(100, 1000),
         1000 to listOf(100, 1000),
     )
-
+    println("Запуск произошел")
     var numbersOfPosOccurrences = 0
+    println(roman)
     for (symbol in romanSymbolsToInt.keys) { //Провекра на многократные использования символов (XXXXX, VV и тд)
         numbersOfPosOccurrences = when (symbol) {
             in listOf('V', 'L', 'D') -> 2
-            in listOf('I', 'X', 'C') -> 3
-            else -> 4
+            in listOf('I', 'C') -> 3
+            in listOf('X', 'M') -> 4
+            else -> 0
         }
+        println("$symbol: ${roman.count { it == symbol }}")
         if (roman.count { it == symbol } > numbersOfPosOccurrences) return -1
     }
+    println("Не содержит излишних вхождений символов")
     var lastSymbol = 1
     val intRoman = mutableListOf<Int>()
     for (symbol in roman) if (symbol in romanSymbolsToInt) romanSymbolsToInt[symbol]?.let { intRoman.add(it) } else return -1
+    println("Не содержит лишних символов")
     println(intRoman)
     for (i in intRoman.indices.reversed()) {
         if (intRoman[i] < lastSymbol) intRoman[i] *= -1
