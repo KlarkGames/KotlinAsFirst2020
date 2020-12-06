@@ -81,7 +81,7 @@ fun dateStrToDigit(str: String): String {
     if (info.size != 3) return ""
     val month = mapOf<String, Pair<Int, Int>>(
         "января" to (1 to 31),
-        "февраля" to (2 to if (info[2].toInt() % 4 == 0) 29 else 28),
+        "февраля" to (2 to if ((info[2].toInt() % 4 != 0 && info[2].toInt() % 100 == 0) || info[2].toInt() % 400 != 0) 28 else 29),
         "марта" to (3 to 31),
         "апреля" to (4 to 30),
         "мая" to (5 to 31),
