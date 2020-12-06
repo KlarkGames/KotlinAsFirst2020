@@ -231,8 +231,8 @@ fun fromRoman(roman: String): Int {
     for (symbol in romanSymbolsToInt.keys) { //Провекра на многократные использования символов (XXXXX, VV и тд)
         numbersOfPosOccurrences = when (symbol) {
             in listOf('V', 'L', 'D') -> 2
-            in listOf('I', 'C') -> 3
-            in listOf('X', 'M') -> 4
+            in listOf('I') -> 3
+            in listOf('X', 'M', 'C') -> 4
             else -> 0
         }
         println("$symbol: ${roman.count { it == symbol }}")
