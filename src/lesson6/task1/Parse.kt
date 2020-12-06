@@ -81,7 +81,7 @@ fun dateStrToDigit(str: String): String {
     if (info.size != 3) return ""
     val month = mapOf<String, Pair<Int, Int>>(
         "января" to (1 to 31),
-        "февраля" to (2 to if ((info[2].toInt() % 4 != 0 && info[2].toInt() % 100 == 0) || info[2].toInt() % 400 != 0) 28 else 29),
+        "февраля" to (2 to if ((info[2].toInt() % 4 == 0 && info[2].toInt() % 100 != 0) || info[2].toInt() % 400 == 0) 29 else 28),
         "марта" to (3 to 31),
         "апреля" to (4 to 30),
         "мая" to (5 to 31),
@@ -204,6 +204,7 @@ fun mostExpensive(description: String): String = TODO()
  * Вернуть -1, если roman не является корректным римским числом
  */
 fun fromRoman(roman: String): Int {
+    /*
     var string = roman
     var result = 0
 
@@ -244,6 +245,46 @@ fun fromRoman(roman: String): Int {
     }
 
     return if (string.isNotEmpty()) -1 else result
+    */
+    val romanSymbolsToInt = mapOf<Char, Int>(
+        'I' to 1,
+        'V' to 5,
+        'X' to 10,
+        'L' to 50,
+        'C' to 100,
+        'D' to 500,
+        'M' to 1000
+    )
+    val symbolLeftNeighbors = mapOf<Int, List<Int>>(
+        1 to listOf(1, 5, 10, 50, 100, 500, 1000),
+        5 to listOf(1, 10, 50, 100, 500, 1000),
+        10 to listOf(1, 10, 50, 100, 500, 1000),
+        50 to listOf(10, 100, 500, 1000),
+        100 to listOf(10, 100, 500, 1000),
+        500 to listOf(100, 1000),
+        1000 to listOf(100, 1000),
+    )
+
+    var numbersOfPosOccurrences = 0
+    for (symbol in romanSymbolsToInt.keys) { //Провекра на многократные использования символов (XXXXX, VV и тд)
+        numbersOfPosOccurrences = when (symbol) {
+            in listOf('V', 'L', 'D') -> 2
+            in listOf('I', 'X', 'C') -> 3
+            else -> 4
+        }
+        if (roman.count { it == symbol } > numbersOfPosOccurrences) return -1
+    }
+    var lastSymbol = 1
+    val intRoman = mutableListOf<Int>()
+    for (symbol in roman) if (symbol in romanSymbolsToInt) romanSymbolsToInt[symbol]?.let { intRoman.add(it) } else return -1
+    println(intRoman)
+    for (i in intRoman.indices.reversed()) {
+        if (intRoman[i] < lastSymbol) intRoman[i] *= -1
+        if (kotlin.math.abs(intRoman[i]) !in symbolLeftNeighbors[kotlin.math.abs(lastSymbol)]!!) return -1
+        lastSymbol = intRoman[i]
+    }
+    return intRoman.sum()
+
 }
 
 /**
