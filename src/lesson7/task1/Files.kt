@@ -236,7 +236,7 @@ fun top20Words(inputName: String): Map<String, Int> {
     var prevValue = -1
     val lastResult = mutableMapOf<String, Int>()
     for ((key, value) in result.toList().sortedByDescending { it.second }.toMap()) {
-        if (counter >= 20 && value != prevValue) {
+        if (counter >= 19 && value != prevValue) {
             break
         }
         prevValue = value
