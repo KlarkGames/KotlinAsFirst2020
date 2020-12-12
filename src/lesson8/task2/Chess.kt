@@ -89,6 +89,8 @@ class Matrix() {
         val minLength = mutableListOf<Int>()
         val minWay = MutableList(64) { listOf(startX) }
 
+        if (!start.inside() || !end.inside()) throw IllegalArgumentException()
+
         for (i in 0 until 64) when (listOfSqueres[i]) {
             listOfSqueres[startX] -> minLength += 0
             in listOfSqueres[startX].neighbors -> minLength += 1
