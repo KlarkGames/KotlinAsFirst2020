@@ -225,6 +225,8 @@ fun alignFileByWidth(inputName: String, outputName: String) {
  */
 fun top20Words(inputName: String): Map<String, Int> {
     val text = File(inputName).readText().replace(Regex("[^A-Za-zА-Яа-яЁё ]"), " ").toLowerCase()
+    println("text:$text\n")
+    println("text.split:${text.split(' ')}")
     val result = mutableMapOf<String, Int>()
     for (word in text.split(' ')) {
         if (word !in result.keys) result += word to 1
@@ -519,7 +521,28 @@ fun markdownToHtml(inputName: String, outputName: String) {
  *
  */
 fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
-    TODO()
+    val result = (lhv * rhv).toString()
+    var listOfSummands = listOf<String>()
+    for (i in rhv.toString().indices) {
+        listOfSummands += (lhv * rhv.toString()[i].toString().toInt()).toString()
+    }
+    listOfSummands = listOfSummands.reversed()
+    val length = result.length + 1
+
+    val writer = File(outputName).bufferedWriter()
+    writer.write(String.format("%${length}s\n", lhv.toString()))
+    writer.write(String.format("*%${length - 1}s\n", rhv.toString()))
+    writer.write("-".repeat(length))
+    writer.write("\n")
+    writer.write(String.format("%${length}s\n", listOfSummands[0]))
+    for (i in 1 until listOfSummands.size) {
+        writer.write(String.format("+%${length - 1 - i}s\n", listOfSummands[i]))
+    }
+    writer.write("-".repeat(length))
+    writer.write("\n")
+    writer.write(" $result")
+
+    writer.close()
 }
 
 
