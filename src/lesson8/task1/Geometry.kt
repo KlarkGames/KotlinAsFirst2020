@@ -3,10 +3,7 @@
 package lesson8.task1
 
 import lesson1.task1.sqr
-import kotlin.math.PI
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.sqrt
+import kotlin.math.*
 
 // Урок 8: простые классы
 // Максимальное количество баллов = 40 (без очень трудных задач = 11)
@@ -82,14 +79,15 @@ data class Circle(val center: Point, val radius: Double) {
      * расстояние между их центрами минус сумма их радиусов.
      * Расстояние между пересекающимися окружностями считать равным 0.0.
      */
-    fun distance(other: Circle): Double = TODO()
+    fun distance(other: Circle): Double = if (radius + other.radius >= center.distance(other.center)) 0.0
+    else center.distance(other.center) - radius + other.radius
 
     /**
      * Тривиальная (1 балл)
      *
      * Вернуть true, если и только если окружность содержит данную точку НА себе или ВНУТРИ себя
      */
-    fun contains(p: Point): Boolean = TODO()
+    fun contains(p: Point): Boolean = ((p.x - center.x).pow(2) + (p.y - center.y).pow(2) <= radius.pow(2))
 }
 
 /**
@@ -109,7 +107,20 @@ data class Segment(val begin: Point, val end: Point) {
  * Дано множество точек. Вернуть отрезок, соединяющий две наиболее удалённые из них.
  * Если в множестве менее двух точек, бросить IllegalArgumentException
  */
-fun diameter(vararg points: Point): Segment = TODO()
+fun diameter(vararg points: Point): Segment {
+    if (points.size < 2) throw IllegalArgumentException()
+    var maximum = 0.0
+    var result = Segment(Point(0.0, 0.0), Point(0.0, 0.0))
+    for (point in points) {
+        for (nextPoint in points) {
+            if (point.distance(nextPoint) > maximum) {
+                maximum = point.distance(nextPoint)
+                result = Segment(point, nextPoint)
+            }
+        }
+    }
+    return result
+}
 
 /**
  * Простая (2 балла)

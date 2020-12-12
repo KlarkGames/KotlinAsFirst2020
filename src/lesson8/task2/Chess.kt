@@ -2,27 +2,123 @@
 
 package lesson8.task2
 
+import java.lang.IllegalArgumentException
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
+
 /**
  * Клетка шахматной доски. Шахматная доска квадратная и имеет 8 х 8 клеток.
  * Поэтому, обе координаты клетки (горизонталь row, вертикаль column) могут находиться в пределах от 1 до 8.
  * Горизонтали нумеруются снизу вверх, вертикали слева направо.
  */
 data class Square(val column: Int, val row: Int) {
-    /**
-     * Пример
-     *
-     * Возвращает true, если клетка находится в пределах доски
-     */
+    var neighbors = listOf<Square>()
+
     fun inside(): Boolean = column in 1..8 && row in 1..8
 
-    /**
-     * Простая (2 балла)
-     *
-     * Возвращает строковую нотацию для клетки.
-     * В нотации, колонки обозначаются латинскими буквами от a до h, а ряды -- цифрами от 1 до 8.
-     * Для клетки не в пределах доски вернуть пустую строку
-     */
-    fun notation(): String = TODO()
+    fun notation(): String {
+        val symbols = listOf('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h')
+        if (this.inside()) return "${symbols[column - 1]}$row"
+        return ""
+    }
+
+    fun connect(square: Square) {
+        this.neighbors += square
+        square.neighbors += this
+    }
+}
+
+
+class Matrix() {
+    var listOfSqueres = listOf<Square>()
+    var matrixOfConnections = Array(64) { Array(64) { 0 } }
+    var info = Array(8) { Array(8) { Square(1, 1) } }
+
+    init {
+        for (x in 0 until 8) {
+            for (y in 0 until 8) {
+                info[x][y] = Square(x + 1, y + 1)
+                listOfSqueres += info[x][y]
+            }
+        }
+    }
+
+    override fun toString(): String {
+        var result = ""
+        for (y in 0 until 8) {
+            for (x in 0 until 8) {
+                result += "${info[x][y].notation()} "
+            }
+            result += "\n"
+        }
+        return result
+    }
+
+    fun createMatrixOfConnections() {
+        var deltaX = 0
+        var deltaY = 0
+        for (x in 0 until 8) for (y in 0 until 8) {
+            for (nextX in 0 until 8) for (nextY in 0 until 8) {
+                deltaX = abs(x - nextX)
+                deltaY = abs(y - nextY)
+                if (deltaX == 1 && deltaY == 2 || deltaX == 2 && deltaY == 1) {
+                    info[x][y].connect(info[nextX][nextY])
+                    matrixOfConnections[x * 8 + y][nextY * 8 + nextX] = 1
+                    matrixOfConnections[y * 8 + x][nextX * 8 + nextY] = 1
+                }
+            }
+        }
+    }
+
+    fun printNeighbors() {
+        var result = ""
+        for (x in 0 until 64) {
+            for (y in 0 until 64) {
+                result += "${matrixOfConnections[x][y]} "
+            }
+            result += "\n"
+        }
+        print(result)
+    }
+
+    fun dijkstra(start: Square, end: Square): Pair<Int, List<Square>> {
+        val startX = start.column * 8 + start.row - 9
+        val endX = end.column * 8 + end.row - 9
+        val passed = mutableListOf<Int>()
+        val minLength = mutableListOf<Int>()
+        val minWay = MutableList(64) { listOf(startX) }
+
+        for (i in 0 until 64) when (listOfSqueres[i]) {
+            listOfSqueres[startX] -> minLength += 0
+            in listOfSqueres[startX].neighbors -> minLength += 1
+            else -> minLength += 64
+        }
+
+        while(passed.size < 64) {
+            var minimum = 64
+            var minimumIndex = -1
+            for (i in 0 until 64) {
+                if (i !in passed) {
+                    if (minLength[i] < minimum) {
+                        minimum = minLength[i]
+                        minimumIndex = i
+                    }
+                }
+            }
+
+            for (i in 0 until 64) if (listOfSqueres[i] in listOfSqueres[minimumIndex].neighbors) {
+                if (minLength[minimumIndex] + 1 <= minLength[i]) {
+                    minLength[i] = minLength[minimumIndex] + 1
+                    minWay[i] = minWay[minimumIndex] + listOf(i)
+                }
+                minLength[i] = min(minLength[i], minLength[minimumIndex] + 1)
+            }
+            passed += minimumIndex
+        }
+
+        return minLength[endX] to minWay[endX].map { listOfSqueres[it] }
+    }
 }
 
 /**
@@ -32,7 +128,16 @@ data class Square(val column: Int, val row: Int) {
  * В нотации, колонки обозначаются латинскими буквами от a до h, а ряды -- цифрами от 1 до 8.
  * Если нотация некорректна, бросить IllegalArgumentException
  */
-fun square(notation: String): Square = TODO()
+fun square(notation: String): Square {
+    val symbols = listOf('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h')
+
+    if (notation.length != 2 || notation[0] !in symbols ||
+        notation[1] !in listOf('1', '2', '3', '4', '5', '6', '7', '8')
+    ) throw IllegalArgumentException()
+    val x = symbols.indexOf(notation[0]) + 1
+    val y = notation[1].toInt() - '0'.toInt()
+    return Square(x, y)
+}
 
 /**
  * Простая (2 балла)
@@ -74,6 +179,7 @@ fun rookMoveNumber(start: Square, end: Square): Int = TODO()
  * Если возможно несколько вариантов самой быстрой траектории, вернуть любой из них.
  */
 fun rookTrajectory(start: Square, end: Square): List<Square> = TODO()
+
 
 /**
  * Простая (2 балла)
@@ -181,7 +287,12 @@ fun kingTrajectory(start: Square, end: Square): List<Square> = TODO()
  * Пример: knightMoveNumber(Square(3, 1), Square(6, 3)) = 3.
  * Конь может последовательно пройти через клетки (5, 2) и (4, 4) к клетке (6, 3).
  */
-fun knightMoveNumber(start: Square, end: Square): Int = TODO()
+fun knightMoveNumber(start: Square, end: Square): Int {
+    val matrix = Matrix()
+    matrix.createMatrixOfConnections()
+
+    return matrix.dijkstra(start, end).first
+}
 
 /**
  * Очень сложная (10 баллов)
@@ -203,4 +314,9 @@ fun knightMoveNumber(start: Square, end: Square): Int = TODO()
  *
  * Если возможно несколько вариантов самой быстрой траектории, вернуть любой из них.
  */
-fun knightTrajectory(start: Square, end: Square): List<Square> = TODO()
+fun knightTrajectory(start: Square, end: Square): List<Square> {
+    val matrix = Matrix()
+    matrix.createMatrixOfConnections()
+
+    return matrix.dijkstra(start, end).second
+}
