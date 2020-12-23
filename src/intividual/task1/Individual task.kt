@@ -20,61 +20,75 @@ import java.io.File
  * (Символы "x", "o" напечатаны на английской раскладке)
  **/
 
-data class Point(val coordinates: Pair<Int, Int>, val value: String)
-
-fun checkLine(list: List<Point>, turn: String): Point {
+fun checkLine(list: List<Triple<Int, Int, String>>, turn: String): Pair<Int, Int>? {
     val opponent = if (turn == "x") "o" else "x"
     var gaps = 0
-    var result = Point(0 to 0, "-")
+    var result: Pair<Int, Int>? = null
 
-    for (point in list) {
-        if (point.value == opponent) return Point(0 to 0, "-")
-        else if (point.value == "-") {
-            result = point
+    for ((x, y, value) in list) {
+        if (value == opponent) return null
+        else if (value == "-") {
             gaps++
+            result = x + 1 to y + 1
         }
     }
     if (gaps == 1) return result
-    return Point(0 to 0, "-")
+    return null
 }
 
-fun createLine(matrix: Array<Array<Point>>, point: Point, turn: String): Point {
-    var tempValue: Point
-    val listOfPoints = mutableListOf<Point>()
+fun createLine(matrix: Array<Array<String>>, point: Triple<Int, Int, String>, turn: String): Pair<Int, Int>? {
+    var tempValue: Pair<Int, Int>?
+    val listOfPoints = mutableListOf<Triple<Int, Int, String>>()
 
-    if (point.coordinates.first in 5..15) {
-        for (i in 0..4) listOfPoints += matrix[point.coordinates.second - 1][point.coordinates.first - 1 - i]
+    if (point.first in 4..14) {
+        for (i in 0..4) listOfPoints += Triple(
+            point.first - i,
+            point.second,
+            matrix[point.second][point.first - i]
+        )
         tempValue = checkLine(listOfPoints, turn)
-        if (tempValue != Point(0 to 0, "-")) return tempValue
+        if (tempValue != null) return tempValue
         listOfPoints.clear()
     }
-    if (point.coordinates.second in 5..15) {
-        for (i in 0..4) listOfPoints += matrix[point.coordinates.second - 1 - i][point.coordinates.first - 1]
+    if (point.second in 4..14) {
+        for (i in 0..4) listOfPoints += Triple(
+            point.first,
+            point.second - i,
+            matrix[point.second - i][point.first]
+        )
         tempValue = checkLine(listOfPoints, turn)
-        if (tempValue != Point(0 to 0, "-")) return tempValue
+        if (tempValue != null) return tempValue
         listOfPoints.clear()
     }
-    if (point.coordinates.first in 5..15 && point.coordinates.second in 5..15) {
-        for (i in 0..4) listOfPoints += matrix[point.coordinates.second - 1 - i][point.coordinates.first - 1 - i]
+    if (point.first in 4..14 && point.second in 4..14) {
+        for (i in 0..4) listOfPoints += Triple(
+            point.first - i,
+            point.second - i,
+            matrix[point.second - i][point.first - i]
+        )
         tempValue = checkLine(listOfPoints, turn)
-        if (tempValue != Point(0 to 0, "-")) return tempValue
+        if (tempValue != null) return tempValue
         listOfPoints.clear()
     }
-    if (point.coordinates.first in 1..11 && point.coordinates.second in 5..15) {
-        for (i in 0..4) listOfPoints += matrix[point.coordinates.second - 1 - i][point.coordinates.first - 1 + i]
+    if (point.first in 0..10 && point.second in 4..14) {
+        for (i in 0..4) listOfPoints += Triple(
+            point.first + i,
+            point.second - i,
+            matrix[point.second - i][point.first + i]
+        )
         tempValue = checkLine(listOfPoints, turn)
-        if (tempValue != Point(0 to 0, "-")) return tempValue
+        if (tempValue != null) return tempValue
         listOfPoints.clear()
     }
-    return Point(0 to 0, "-")
+    return null
 }
 
 fun ticTacToe(inputFileName: String, turn: String): Pair<Int, Int>? {
-    var matrix = arrayOf<Array<Point>>()
+    var matrix = arrayOf<Array<String>>()
     var i = 0
     var j: Int
-    var row: Array<Point>
-    var tempValue: Point
+    var row: Array<String>
+    var tempValue: Pair<Int, Int>?
 
     for (line in File(inputFileName).readLines()) {
         i++
@@ -83,10 +97,10 @@ fun ticTacToe(inputFileName: String, turn: String): Pair<Int, Int>? {
         matrix += row
         for (symbol in line) {
             j++
-            row += Point(j to i, symbol.toString())
+            row += symbol.toString()
             matrix[i - 1] = row
-            tempValue = createLine(matrix, matrix[i - 1][j - 1], turn)
-            if (tempValue.coordinates != 0 to 0) return tempValue.coordinates
+            tempValue = createLine(matrix, Triple(j - 1, i - 1, matrix[i - 1][j - 1]), turn)
+            if (tempValue != null) return tempValue.first to tempValue.second
         }
     }
     return null
